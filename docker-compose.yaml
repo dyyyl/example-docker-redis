@@ -1,0 +1,15 @@
+# Describe the services that compose the application.
+services:
+  redis: # Describe the redis service.
+    image: redis:alpine # Using redis:alpine.
+    ports: # Bind local port to port exposed by service.
+      - "6379:6379" # By convention, redis is exposed on port 6379.
+
+  app: # Describe this application.
+    image: golang # Using the golang image.
+    volumes:
+      - .:/go/src # Binds SOURCE (here, local path `.`) to TARGET (`/go/src` in the container).
+    working_dir: /go/src # From the `src` directory.
+    command: ["tail", "-f", "/dev/null"] # `tail -f /dev/null` will make the container loop until stopped.
+    environment: # Define container-level environment variables.
+      REDIS_HOST: "redis" # Pass expected host value to container.
